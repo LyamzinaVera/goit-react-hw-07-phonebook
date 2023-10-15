@@ -1,3 +1,4 @@
+
 import React,{ useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addContact } from 'redux/contactsAPI';
@@ -22,20 +23,22 @@ export default function ContactForm(){
     };
 
  const handleSubmit = e => {
-    e.preventDefault();
-    const newContact = {
-      name,
-      phone,
-      id: shortid.generate(),
-    };
-  contacts.find(contact => contact.name.toLowerCase() === name.toLowerCase())
-  ? alert(`${name} is already in contacts`)
-  : dispatch(addContact(newContact));
-  reset();
-};
-const reset = () => {
-  setName('');
-  setPhone('');
+  e.preventDefault();
+   if (contacts) {
+     const existingContact = contacts.find(contact => contact.name.toLowerCase() === name.toLowerCase());
+     if (existingContact) {
+       alert(`${name} is already in contacts`);
+     } else {
+       const newContact = {
+         name,
+         phone,
+         id: shortid.generate(),
+       };
+       dispatch(addContact(newContact));
+       setName('');
+       setPhone('');
+     }
+   }
 };
   
     return (
@@ -73,3 +76,4 @@ const reset = () => {
   ContactForm.propTypes = {
     handleSubmit: PropTypes.func
   };
+  
